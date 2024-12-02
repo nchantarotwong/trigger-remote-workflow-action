@@ -1,0 +1,41 @@
+name: Trigger and Poll Workflow
+description: A custom GitHub Action to trigger a workflow dispatch and wait for its completion.
+author: Your Name
+inputs:
+  github_token:
+    description: GitHub token with repository permissions.
+    required: true
+  repository:
+    description: Target repository in the format owner/repo.
+    required: true
+  event_type:
+    description: Event type for the repository dispatch.
+    required: true
+  ref:
+    description: The branch or ref for the workflow.
+    required: true
+  trigger_timestamp:
+    description: Timestamp to start polling for workflows.
+    required: true
+outputs:
+  workflow_url:
+    description: URL of the triggered workflow.
+    value: ${{ steps.poll-workflow.outputs.workflow_url }}
+  workflow_run_id:
+    description: ID of the triggered workflow.
+    value: ${{ steps.poll-workflow.outputs.workflow_run_id }}
+runs:
+  using: "composite"
+  steps:
+    - name: Trigger Workflow
+      run: ./scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}
+      shell: bash
+
+    - name: Poll Workflow
+      id: poll-workflow
+      run: ./scripts/poll-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.ref }} ${{ inputs.event_type }} ${{ inputs.trigger_timestamp }}
+      shell: bash
+
+    - name: Wait for Completion
+      run: ./scripts/wait-for-completion.sh ${{ inputs.github_token }} ${{ steps.poll-workflow.outputs.workflow_url }}
+      shell: bash

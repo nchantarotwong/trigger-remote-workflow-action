@@ -17,6 +17,10 @@ inputs:
   trigger_timestamp:
     description: Timestamp to start polling for workflows.
     required: true
+  skip_slack:
+    description: A flag to skip Slack notifications (true or false).
+    required: false
+    default: 'false'
 outputs:
   workflow_url:
     description: URL of the triggered workflow.
@@ -28,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - name: Trigger Workflow
-      run: "${{ github.action_path }}/scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}"
+      run: "${{ github.action_path }}/scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }} ${{ inputs.skip_slack }}"
       shell: bash
 
     - name: Poll Workflow

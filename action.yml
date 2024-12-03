@@ -20,7 +20,7 @@ inputs:
   skip_slack:
     description: A flag to skip Slack notifications (true or false).
     required: false
-    default: 'true'
+    default: 'false'
 outputs:
   workflow_url:
     description: URL of the triggered workflow.

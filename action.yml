@@ -27,25 +27,15 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Debug Working Directory
-      run: |
-        echo "Current directory: $(pwd)"
-        echo "Contents:"
-        ls -R
-      shell: bash
-
     - name: Trigger Workflow
-      run: ./scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}
+      run: "${{ github.action_path }}/scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}"
       shell: bash
-      working-directory: ./
 
     - name: Poll Workflow
       id: poll-workflow
-      run: ./scripts/poll-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.ref }} ${{ inputs.event_type }} ${{ inputs.trigger_timestamp }}
+      run: "${{ github.action_path }}/scripts/poll-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.ref }} ${{ inputs.event_type }} ${{ inputs.trigger_timestamp }}"
       shell: bash
-      working-directory: ./
 
     - name: Wait for Completion
-      run: ./scripts/wait-for-completion.sh ${{ inputs.github_token }} ${{ steps.poll-workflow.outputs.workflow_url }}
+      run: "${{ github.action_path }}/scripts/wait-for-completion.sh ${{ inputs.github_token }} ${{ steps.poll-workflow.outputs.workflow_url }}"
       shell: bash
-      working-directory: ./

@@ -45,5 +45,5 @@ if [ -z "$workflow_run_url" ]; then
   exit 1
 fi
 
-echo "workflow_url=$workflow_run_url"
-echo "workflow_run_id=$workflow_run_id"
+echo "workflow_url=$workflow_run_url" >> "$GITHUB_ENV"
+echo "workflow_run_id=$workflow_run_id" >> "$GITHUB_ENV"

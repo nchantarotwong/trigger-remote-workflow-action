@@ -27,6 +27,13 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Debug Working Directory
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Contents:"
+        ls -R
+      shell: bash
+
     - name: Trigger Workflow
       run: ./scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}
       shell: bash

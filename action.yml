@@ -27,6 +27,14 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: List Files
+      run: ls -R
+      shell: bash
+
+    - name: Enable Debug Logs
+      run: echo "::set-env name=ACTIONS_STEP_DEBUG::true"
+      shell: bash
+
     - name: Trigger Workflow
       run: ./scripts/trigger-workflow.sh ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.event_type }}
       shell: bash
